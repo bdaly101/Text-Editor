@@ -27,7 +27,11 @@ export default class {
     getDb().then((data) => {
       console.log(data)
       console.info('Loaded data from IndexedDB, injecting into editor');
-      this.editor.setValue(data || localData || header);
+      this.editor.setValue(typeof data === 'string' ? data : localData || header);
+    }).catch((error) => {
+      console.error('Error loading data from IndexedDB:', error);
+      // Fallback to localData or header if there's an error
+      this.editor.setValue(localData || header);
     });
 
     this.editor.on('change', () => {
